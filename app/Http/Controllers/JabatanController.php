@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Request;
+use Input;
+use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Jabatan;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class JabatanController extends Controller
 {
-    /**
+    /*
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-     public function __construct()
+      public function __construct()
     {
         $this->middleware('HRD');
-    }
+     }
     public function index()
     {
         //kategori
@@ -42,8 +48,16 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         //
-        $Jabatan=Request::all();
-        Jabatan::create($Jabatan);
+      $this -> validate($request, [
+            'Kode_Jabatan' => 'required|min:3|unique:Jabatan',
+            ]);
+
+        $jabat = new Jabatan;
+        $jabat->Kode_Jabatan = $request->get('Kode_Jabatan');
+        $jabat->Nama_Jabatan = $request->get('Nama_Jabatan');
+        $jabat->Besaran_Uang = $request->get('Besaran_Uang');
+        $jabat->save();
+
         return redirect('Jabatan');
     }
 
@@ -67,8 +81,8 @@ class JabatanController extends Controller
     public function edit($id)
     {
         //
-        $Jabatan=Jabatan::find($id);
-        return view('Jabatan.edit',compact('Jabatan'));
+      $Jabatan = Jabatan::find($id);
+        return view('Jabatan.edit', compact('Jabatan'));
   
     }
 
@@ -82,10 +96,17 @@ class JabatanController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $JabatanUpdate=Request::all();
-        $Jabatan=Jabatan::find($id);
-        $Jabatan->update($JabatanUpdate);
-        return redirect('Jabatan'); 
+          $Jabatan = Jabatan::find($id);
+
+        $this -> validate($request, [
+            'Kode_Jabatan' => 'required|min:3',
+            ]);
+        $Jabatan->Kode_Jabatan = $request->get('Kode_Jabatan');
+        $Jabatan->Nama_Jabatan = $request->get('Nama_Jabatan');
+        $Jabatan->Besaran_Uang = $request->get('Besaran_Uang');
+
+        $Jabatan->save();
+        return redirect('Jabatan');
     }
 
     /**

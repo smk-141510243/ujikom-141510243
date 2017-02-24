@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Request;
+use Illuminate\Http\Request;
 use App\Jabatan;
 use App\Golongan;
 use App\User;
@@ -12,7 +12,7 @@ use Validator;
 use Input;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PegawaiController extends Controller
 {
         use RegistersUsers;
@@ -23,7 +23,7 @@ class PegawaiController extends Controller
      */
      public function __construct()
     {
-        $this->middleware('HRD');
+        $this->middleware('Admin');
     }
     public function index()
     {
@@ -73,58 +73,34 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         //
-            // $this->validate($request,[
-            
-            // 'name' => 'required',
-            // 'nip' => 'required|numeric|min:3|unique:Pegawai',
-            // 'permission' => 'required|max:255',
-            // 'email' => 'required|email|max:255|unique:users',
-            // 'password' => 'required|min:6|confirmed',
-            //  ]);
 
-
-
-        $input = Request::all();
-        // dd($input);
+$input = $request->all();
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => bcrypt($input['password']),
             'permission' => $input['permission']
-            
         ]);
 
-        $file = Input::file('Photo');
-        $destinationPath = public_path().'/image/';
-        $filename = str_random(6).'_'.$file->getClientOriginalName();
-        $uploadSuccess = $file->move($destinationPath, $filename);
-
-        if(Input::hasFile('Photo')){
            $mm = new Pegawai;
            $mm->Nip = Input::get('Nip'); 
            $mm->user_id = $user->id;  
            $mm->Kode_Jabatan = Input::get('Kode_Jabatan'); 
            $mm->Kode_Golongan = Input::get('Kode_Golongan'); 
-           $mm->Photo = $filename;
-           $mm->save();
+
+        if($request->hasFile('Photo')){
+            $file = $request->file('Photo');
+            $destinationPath = public_path().'/image/';
+            $extention = $file->getClientOriginalName();
+            $filename = str_random(6).'_'. $extention;
+            $uploadSuccess = $file->move($destinationPath, $filename);
+            $mm->Photo = $filename;
         }
-        return redirect('Pegawai');
-
-        
-
-        // if ($request->hasFile('Photo')){
-        //     $uploaded_photo = $request->file('Photo');
-        // $extension = 
-        // $uploaded_photo->getClientOriginalExtension();
-        // $filename = md5 (time()) . '.' . $extension;
-        // $destinationPath = public_path() . 
-        // DIRECTORY_SEPARATOR . 'image';
-        // $uploaded_cover->move($destinationPath, $filename);
-        // $Foto->cover = $filename;
-        // $Foto->save();
-
-        // }
-        // return redirect('Pegawai');
+        else{
+            $mm->Photo = 'default.png';
+        }
+            $mm->save();
+        return redirect(route('Pegawai.index'));
     }
 
     /**
@@ -165,45 +141,36 @@ class PegawaiController extends Controller
     public function update(Request $request, $id)
     {
         //
-         $Pegawai = Pegawai::find($id);
+        $Pegawai = Pegawai::find($id);
+            $Pegawai->Nip = $request->get('Nip');
+            $Pegawai->Kode_Golongan = $request->get('Kode_Golongan');
+            $Pegawai->Kode_Jabatan = $request->get('Kode_Jabatan');
 
-        if(Request::hasFile('Photo')){
-            $file = Request::file('Photo');
-            $destinationPath = public_path().'/image/';
-            $filename = str_random(6).'_'.$file->getClientOriginalName();
-            $uploadSuccess = $file->move($destinationPath, $filename);
+        $this -> validate($request, [
+            'Nip' => 'required|numeric|min:3|',
+            ]);
+
+        if($request->hasFile('Photo')){
+            $filename = null;
+            $uploaded_photo = $request->file('Photo');
+            $extension = $uploaded_photo->getClientOriginalExtension();
+            $filename = md5 (time()) . '.' . $extension;
+            $destinationPath = public_path() . DIRECTORY_SEPARATOR . '/image/';
+            $uploaded_photo->move($destinationPath, $filename);
+            if ($Pegawai->Photo) {
+                $old_photo = $Pegawai->Photo;
+                $filepath = public_path() . DIRECTORY_SEPARATOR . '/image/' . DIRECTORY_SEPARATOR . $Pegawai->Photo;
+                try {
+                    File::delete($filepath);
+                } catch(FileNotFoundException $e) {
+                    // File sudah dihapus/tidak ada
+                }
+            }
+            $Pegawai->Photo = $filename;
         }
-        
-        $Pegawai->Nip = Request::get('Nip'); 
-        $Pegawai->Kode_Jabatan = Request::get('Kode_Jabatan'); 
-        $Pegawai->Kode_Golongan = Request::get('Kode_Golongan'); 
-        $Pegawai->Photo = $filename;
         $Pegawai->save();
+
         return redirect('Pegawai');
-        
-        // if ($request->hasFile('Photo')){
-        //     $filename = null;
-        //     $uploaded_cover = $request->file('Photo');
-        //     $extension = $uploaded_cover->getClientOriginalExtension();
-        //     $filename = md5(time()) . '.' . $extension;
-        //     $destinationPath = public_path() . DIRECTORY_SEPARATOR . 'image';
-        //     $uploaded_cover->move ($destinationPath, $filename);
-            
-        //     if ($book->cover){
-        //         $old_cover = $Foto->cover;
-        //         $filepath = public_path() . DIRECTORY_SEPARATOR . 'image' 
-        //         . DIRECTORY_SEPARATOR . $book->cover;
-        //         try{
-        //             File::delete($filepath);
-        //         } catch (FileNotFoundException $e){
-
-        //         }
-        //     }
-
-        //     $Foto->cover = $filename;
-        //     $Foto->save();
-        // }
-
     }
 
     /**

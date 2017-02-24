@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container">
-	<div class="row">
+    <div class="row">
              <div class="panel panel-primary">
-                <div class="panel-heading">Tambah Data Pegawai</div>
+                <div class="panel-heading"><h3><font face="Maiandra GD" color="white">Tambah Data Pegawai</font></h3></div>
                 <div class="panel-body">
                 <hr>
                 <form class="form-horizontal" role="form" method="POST" action="{{url('/Pegawai')}}" enctype="multipart/form-data">
@@ -44,8 +44,9 @@
                                <select class="form-control" name="permission">
                                     <option value="Admin">Admin</option>
                                     <option value="Pegawai">Pegawai</option>
-                                    <option value="HRD">HRD</option>
-                                    <option value="bendahara">bendahara</option>
+                                    <option value="Pegawai">HRD</option>
+                                    <option value="Pegawai">bendahara</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -72,15 +73,15 @@
                             </div>
                         </div>                        
                         <hr>
-						<div class="form-group{{ $errors->has('Nip') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('Nip') ? ' has-error' : '' }}">
                             <label for="Nip" class="col-md-4 control-label">NIP</label>
-							<div class="col-md-6">
+                            <div class="col-md-6">
                                 <input id="Nip" type="text" class="form-control" name="Nip" value="{{ $kode }}" readonly required autofocus>
                             </div>
                         </div>
                     
 
-						<div class="form-group{{ $errors->has('Kode_Jabatan') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('Kode_Jabatan') ? ' has-error' : '' }}">
                             <label for="Kode_Jabatan" class="col-md-4 control-label">Nama Jabatan</label>
                             <div class="col-md-6">
                                 <select name="Kode_Jabatan" class="form-control">
@@ -104,20 +105,21 @@
                         <div class="form-group{{ $errors->has('Photo') ? ' has-error' : '' }}">
                             <label for="Photo" class="col-md-4 control-label">Photo</label>
                             <div class="col-md-6">
-                                <input id="Photo" type="file" class="form-control" name="Photo" value="{{ old('Photo') }}" required autofocus>
+                           
+                                <input id="Photo" type="file" class="form-control" name="Photo" value="{{ old('Photo') }}" autofocus>
                             </div>
                         </div>
-						<div class="form-group">
+                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Tambah
                                 </button>
                             </div>
                         </div>
-					{!! Form::close() !!}
-	           </div>
-	       </div>
-	   </div>
+                    {!! Form::close() !!}
+               </div>
+           </div>
+       </div>
     </div>
-</div> 	
+</div>  
 @endsection

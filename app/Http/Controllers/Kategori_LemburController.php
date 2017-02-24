@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Request;
-use App\Golongan;
-use App\Jabatan;
-use App\Kategori_Lembur;
+use Input;
+use Illuminate\http\Request;
 
+use App\Golongan;
+use App\Kategori_Lembur;
+use App\Jabatan;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Kategori_LemburController extends Controller
 {
-    /**
+    /*
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+    //  */
      public function __construct()
-    {
-        $this->middleware('Admin');
+     {
+         $this->middleware('Admin');
     }
     public function index()
     {
@@ -48,8 +52,19 @@ class Kategori_LemburController extends Controller
     public function store(Request $request)
     {
         //
-         $Kategori_Lembur=Request::all();
-        Kategori_Lembur::create($Kategori_Lembur);
+        
+        $this -> validate($request, [
+            'Kode_Lembur' => 'required|min:3|unique:Kategori_Lembur',
+            ]);
+
+        $Kategori_Lembur = new Kategori_Lembur;
+        $Kategori_Lembur->Kode_Lembur = $request->get('Kode_Lembur');
+        $Kategori_Lembur->Kode_Jabatan = $request->get('Kode_Jabatan');
+        $Kategori_Lembur->Kode_Golongan = $request->get('Kode_Golongan');
+        
+        $Kategori_Lembur->Besaran_Uang = $request->get('Besaran_Uang');
+        $Kategori_Lembur->save();
+
         return redirect('Kategori_Lembur');
     }
 

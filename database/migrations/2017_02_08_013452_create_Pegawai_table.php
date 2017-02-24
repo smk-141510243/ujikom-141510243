@@ -29,7 +29,7 @@ class CreatePegawaiTable extends Migration
             $table->foreign('Kode_Golongan')->references('id')->on('Golongan')
                   ->onUpdate('cascade')->onDelete('cascade');
            
-            $table->string('Photo');
+            $table->string('Photo')->nullable();
             $table->timestamps();
         });
     }

@@ -4,8 +4,9 @@
 
 <br><br><br><br><br><br><br>
   <div class="container">
-           <div class="panel panel-default">
-                <div class="panel-heading"><center><font color="black" size="50%">PENGGAJIAN</font></div>
+            <div class="row">
+                    <center><h2>Input Data Penggajian</h2></center>
+                    <br />
               {!! Form::open(['url' => 'Penggajian', 'class' => 'form-horizontal form-label-left']) !!}
     <div class="form-group">
         <div class="control-label col-md-3 col-sm-3 col-xs-12">
@@ -13,9 +14,9 @@
              <span class="required">*</span>
         </div>
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <select class="form-control col-md-7 col-xs-12" name="tunjangan_pegawai_id">
-            <option>--NIP | Nama Pegawai--</option>
-            @foreach($gaji as $data)
+            <select class="form-control col-md-7 col-xs-12" name="Kode_Tunjangan">
+            
+            @foreach($Gaji as $data)
                 <option value="{{$data->id}}">{{$data->Pegawai->Nip}}&nbsp;|&nbsp;{{$data->Pegawai->User->name}}</option>
             @endforeach
             </select>
@@ -23,7 +24,7 @@
     </div>
     <div class="form-group">
         <div class="control-label col-md-3 col-sm-3 col-xs-12">
-            {!! Form::label('Status Pengambilan', 'Status Pengambialn ') !!}
+            {!! Form::label('Status Pengambilan', 'Status Pengambilan ') !!}
              <span class="required">*</span>
         </div>
         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -35,7 +36,7 @@
     </div>
      <div class="col-md-6 col-sm-6 col-xs-12">
       <span class="help-block">
-            {{$errors->first('tunjangan_pegawai_id')}}
+            {{$errors->first('Kode_Tunjangan')}}
           </span>
                                        <div>
                                            @if(isset($error))
@@ -44,7 +45,7 @@
                                        </div>
                                </div>
        <div class="form-group">
-         
+          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
               {!! Form::submit('Save', ['class' => 'btn btn-primary form-control']) !!}
           </div>
       </div>
@@ -54,8 +55,3 @@
           </div>     
     </div>
 @endsection
-
-
-
-
-

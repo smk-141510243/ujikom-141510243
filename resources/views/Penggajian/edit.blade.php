@@ -16,7 +16,7 @@
                   </div>
                   <div class="x_content">
                     <br />
-    {!! Form::model($data,['method' => 'PATCH','route'=>['Penggajians.update',$data->id],'class' => 'form-horizontal form-label-left','files'=>'true']) !!}
+    {!! Form::model($data,['method' => 'PATCH','route'=>['Penggajian.update',$data->id],'class' => 'form-horizontal form-label-left','files'=>'true']) !!}
     <div id="pegawai">
     <div class="form-group">
           <div class="control-label col-md-3 col-sm-3 col-xs-12">

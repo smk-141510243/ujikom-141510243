@@ -5,10 +5,16 @@
 </center>
                 <div class="panel-body">
     {!! Form::open(['url' => 'Kategori_Lembur']) !!}
-    <div class="form-group">
-        {!! Form::label('Kode Lembur', 'Kode Lembur') !!}
-        {!! Form::text('Kode_Lembur',null,['class'=>'form-control','required']) !!}
-    </div>
+    <div class="form-group{{ $errors->has('Kode_Lembur') ? ' has-error' : '' }}">
+                            {!! Form::label('Kode', 'Kode Lembur:') !!}
+                            <input type="text" name="Kode_Lembur" class="form-control" required>
+
+                            @if ($errors->has('Kode_Lembur'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('Kode_Lembur') }}</strong>
+                                </span>
+                            @endif 
+                        </div>
 
       <div class="form-group">
       {!! Form::label('Jabatan', 'Jabatan') !!}

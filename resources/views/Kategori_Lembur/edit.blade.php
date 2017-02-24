@@ -7,7 +7,7 @@
   {!! Form::model($Kategori_Lembur,['method' => 'PATCH','route'=>['Kategori_Lembur.update',$Kategori_Lembur->id]]) !!}
     <div class="form-group">
         {!! Form::label('Kode Lembur', 'Kode Lembur') !!}
-        {!! Form::text('Kode_Lembur',null,['class'=>'form-control','required']) !!}
+        {!! Form::text('Kode_Lembur',null,['class'=>'form-control','required','readonly']) !!}
     </div>
 
       <div class="form-group">

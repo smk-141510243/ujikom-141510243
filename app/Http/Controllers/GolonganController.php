@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Request;
-use App\Golongan;
-use DB;
-use Validator;
 use Input;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Golongan;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GolonganController extends Controller
 {
@@ -47,8 +49,16 @@ class GolonganController extends Controller
     public function store(Request $request)
     {
         //
-         $Golongan=Request::all();
-        Golongan::create($Golongan);
+        $this -> validate($request, [
+            'Kode_Golongan' => 'required|min:3|unique:Golongan',
+            ]);
+
+        $gol = new Golongan;
+        $gol->Kode_Golongan = $request->get('Kode_Golongan');
+        $gol->Nama_Golongan = $request->get('Nama_Golongan');
+        $gol->Besaran_Uang = $request->get('Besaran_Uang');
+        $gol->save();
+
         return redirect('Golongan');
     }
 
@@ -87,12 +97,18 @@ class GolonganController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $GolonganUpdate=Request::all();
-        $Golongan=Golongan::find($id);
-        $Golongan->update($GolonganUpdate);
-        return redirect('Golongan'); 
-    }
+                  $Golongan = Golongan::find($id);
 
+        $this -> validate($request, [
+            'Kode_Golongan' => 'required|min:3',
+            ]);
+                $gol->Kode_Golongan = $request->get('Kode_Golongan');
+        $gol->Nama_Golongan = $request->get('Nama_Golongan');
+        $gol->Besaran_Uang = $request->get('Besaran_Uang');
+        $gol->save();
+
+        return redirect('Golongan');
+    }
     /**
      * Remove the specified resource from storage.
      *
