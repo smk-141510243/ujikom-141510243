@@ -23,7 +23,7 @@ class PegawaiController extends Controller
      */
      public function __construct()
     {
-        $this->middleware('Admin');
+        $this->middleware('HRD');
     }
     public function index()
     {

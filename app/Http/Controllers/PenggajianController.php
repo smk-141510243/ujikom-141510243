@@ -24,7 +24,7 @@ class PenggajianController extends Controller
      */
      public function __construct()
     {
-        $this->middleware('Admin');
+        $this->middleware('bendahara');
     }
     public function index()
     {
